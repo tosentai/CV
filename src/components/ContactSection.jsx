@@ -33,7 +33,7 @@ export const ContactSection = () => {
                                         href="mailto:anton.anpilohov@gmail.com"
                                         className="text-muted-foreground hover:text-primary transition-colors"
                                     >
-                                        anton.anpilohov@gmail.com
+                                        Click to email me
                                     </a>
                                 </div>
                             </div>
@@ -51,7 +51,7 @@ export const ContactSection = () => {
                                         href="tel:+380965702639"
                                         className="text-muted-foreground hover:text-primary transition-colors"
                                     >
-                                        +380965702639
+                                        Click to call me
                                     </a>
                                 </div>
                             </div>
