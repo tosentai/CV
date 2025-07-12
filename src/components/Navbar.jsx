@@ -25,32 +25,26 @@ export const Navbar = () => {
         };
     }, []);
 
-    // Lock/unlock scroll when menu opens/closes
     useEffect(() => {
         if (isMenuOpen) {
-            // Save current scroll position
             const scrollY = window.scrollY;
 
-            // Lock scroll
             document.body.style.position = "fixed";
             document.body.style.top = `-${scrollY}px`;
             document.body.style.width = "100%";
             document.body.style.overflowY = "hidden";
         } else {
-            // Restore scroll position
             const scrollY = document.body.style.top;
             document.body.style.position = "";
             document.body.style.top = "";
             document.body.style.width = "";
             document.body.style.overflowY = "";
 
-            // Restore scroll position
             if (scrollY) {
                 window.scrollTo(0, parseInt(scrollY || "0") * -1);
             }
         }
 
-        // Cleanup on unmount
         return () => {
             document.body.style.position = "";
             document.body.style.top = "";
@@ -117,7 +111,6 @@ export const Navbar = () => {
                             : "opacity-0 pointer-events-none"
                     )}
                 >
-                    {/* Close button in the same position as hamburger */}
                     <button
                         onClick={() => setIsMenuOpen(false)}
                         className="absolute top-3 right-4 p-2 text-foreground hover:text-primary transition-colors z-[60]"
