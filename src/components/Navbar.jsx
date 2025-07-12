@@ -25,6 +25,40 @@ export const Navbar = () => {
         };
     }, []);
 
+    // Lock/unlock scroll when menu opens/closes
+    useEffect(() => {
+        if (isMenuOpen) {
+            // Save current scroll position
+            const scrollY = window.scrollY;
+
+            // Lock scroll
+            document.body.style.position = "fixed";
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.width = "100%";
+            document.body.style.overflowY = "hidden";
+        } else {
+            // Restore scroll position
+            const scrollY = document.body.style.top;
+            document.body.style.position = "";
+            document.body.style.top = "";
+            document.body.style.width = "";
+            document.body.style.overflowY = "";
+
+            // Restore scroll position
+            if (scrollY) {
+                window.scrollTo(0, parseInt(scrollY || "0") * -1);
+            }
+        }
+
+        // Cleanup on unmount
+        return () => {
+            document.body.style.position = "";
+            document.body.style.top = "";
+            document.body.style.width = "";
+            document.body.style.overflowY = "";
+        };
+    }, [isMenuOpen]);
+
     return (
         <nav
             className={cn(
@@ -63,21 +97,35 @@ export const Navbar = () => {
                 {/* Mobile */}
                 <button
                     onClick={() => setIsMenuOpen((prev) => !prev)}
-                    className="md:hidden p-2 text-foreground z-50"
-                    aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                    className={cn(
+                        "md:hidden p-2 text-foreground z-[70] relative transition-opacity duration-300",
+                        isMenuOpen
+                            ? "opacity-0 pointer-events-none"
+                            : "opacity-100 pointer-events-auto"
+                    )}
+                    aria-label="Open menu"
                 >
-                    {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                    <Menu size={24} />
                 </button>
 
                 <div
                     className={cn(
-                        "fixed inset-0 bg-background/95 backdrop-blur-md z-40 flex flex-col items-center justify-center",
+                        "fixed inset-0 bg-background z-50 flex flex-col items-center justify-center",
                         "transition-all duration-300 md:hidden",
                         isMenuOpen
                             ? "opacity-100 pointer-events-auto"
                             : "opacity-0 pointer-events-none"
                     )}
                 >
+                    {/* Close button in the same position as hamburger */}
+                    <button
+                        onClick={() => setIsMenuOpen(false)}
+                        className="absolute top-3 right-4 p-2 text-foreground hover:text-primary transition-colors z-[60]"
+                        aria-label="Close menu"
+                    >
+                        <X size={24} />
+                    </button>
+
                     <div className="flex flex-col space-y-8 text-xl">
                         {navItems.map((item, key) => (
                             <a
